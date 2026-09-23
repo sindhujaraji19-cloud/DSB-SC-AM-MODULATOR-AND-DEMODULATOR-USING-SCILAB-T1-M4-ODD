@@ -45,7 +45,62 @@ To write a program to perform DSBSC modulation and demodulation using SCI LAB an
 Plot the message signal, carrier signal, DSBSC modulated signal, and the recovered signal after demodulation.
 
 ---
+## CODE
+clc;
+clear;
+close;
 
+// Time
+t = 0:0.00001:0.01;
+
+// Message signal
+Am = 1;
+fm = 1000;
+m = Am*sin(2*%pi*fm*t);
+
+// Carrier signal
+Ac = 1;
+fc = 10000;
+c = Ac*cos(2*%pi*fc*t);
+
+// DSB-SC Modulation
+dsbsc = m .* c;
+
+// Coherent Demodulation
+demod = 2 * dsbsc .* c;
+
+// Low Pass Filter
+fc_lp = 2000;
+[b,a] = iir(5,'lp','butt',[fc_lp/(1/(2*0.00001)) 0],[]);
+output = flts(demod,b,a);
+
+// Plot Message Signal
+subplot(4,1,1);
+plot(t,m);
+xlabel("Time (s)");
+ylabel("Amplitude");
+title("Message Signal");
+
+// Plot Carrier Signal
+subplot(4,1,2);
+plot(t,c);
+xlabel("Time (s)");
+ylabel("Amplitude");
+title("Carrier Signal");
+
+// Plot DSB-SC Signal
+subplot(4,1,3);
+plot(t,dsbsc);
+xlabel("Time (s)");
+ylabel("Amplitude");
+title("DSB-SC Modulated Signal");
+
+// Plot Demodulated Signal
+subplot(4,1,4);
+plot(t,output);
+xlabel("Time (s)");
+ylabel("Amplitude");
+title("Demodulated Signal");
 ## PROCEDURE
 
 * Refer Algorithms and write code for the experiment.
